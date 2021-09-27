@@ -1,0 +1,32 @@
+GET https://localhost:4000/all
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-09-23T113224.503.html
+
+###
+
+GET http://localhost:4000/all
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-09-23T113159.503.html
+
+###
+
+GET http://localhost:4000/all
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-09-23T111821.503.html
+
+###
+
+GET https://localhost:4000/all
+Accept: */*
+Cache-Control: no-cache
+
+<> 2020-09-23T111737.503.html
+
+###
+

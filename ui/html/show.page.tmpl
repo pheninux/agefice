@@ -1,0 +1,74 @@
+{{template "base" .}}
+
+{{define "title"}}Stagiaire #{{.Personne.Id}}{{end}}
+
+{{define "body"}}
+    {{with .Personne}}
+        <div class='snippet'>
+            <div class='metadata'>
+                <strong>Profile</strong>
+            </div>
+            <pre>{{.Prenom}} {{.Nom}}<br>{{.Age}} ans<br>{{if .Adresse}}{{.Adresse}}{{else}}Adresse non rensegné !{{end}}<br>{{.Tel}}<br>{{.Nsocial}}<br>{{.Mail}}</pre>
+
+        </div>
+        <div class='snippet'>
+            <div class='metadata'>
+                <strong>Entreprise</strong>
+            </div>
+            {{with .Entreprise}}
+                <pre>{{.Nom}} <br>code : {{.Code}}</pre>
+            {{end}}
+        </div>
+        <div class='snippet'>
+            <div class='metadata'>
+                <strong>Documents</strong>
+            </div>
+            <div style="padding: 18px">
+                <table>
+                    <tr>
+                        <th>Libellé</th>
+                    </tr>
+                    {{range .Document}}
+                        <tr>
+                            <td>{{.Libelle}}</td>
+                        </tr>
+                    {{end}}
+
+                </table>
+            </div>
+
+        </div>
+        <div class='snippet'>
+            <div class='metadata'>
+                <strong>Formations</strong>
+            </div>
+            <div style="padding: 18px">
+                <table>
+                    <tr>
+                        <th>Date de création</th>
+                        <th>Intitulé</th>
+                        <th>Date début</th>
+                        <th>Date Fin</th>
+                        <th>Heures</th>
+                        <th>Coût</th>
+                    </tr>
+
+                    {{range .Formation}}
+                        <tr>
+                            <td>{{humainDate .CreatedAt}}</td>
+                            <td>{{.Intitule}}</td>
+                            <td>{{humainDate .DateDebut}}</td>
+                            <td>{{humainDate .DateFin}}</td>
+                            <td>{{.NbrHeures}}</td>
+                            <td>{{.Cout}}</td>
+                        </tr>
+                    {{end}}
+                </table>
+            </div>
+        </div>
+    {{end}}
+    <div style="text-align: center">
+        <input type="submit" value="Modifier" onclick="updatePersonneById({{.Personne}})">
+        <input type="submit" value="Supprimer" onclick="deletePersonneById({{.Personne.Id}})" style="background: red">
+    </div>
+{{end}}

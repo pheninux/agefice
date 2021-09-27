@@ -1,0 +1,87 @@
+{{template "base" .}}
+
+{{define "title"}}Home{{end}}
+
+{{define "body"}}
+    <script>
+        $(document).ready(function () {
+
+            // Setup - add a text input to each footer cell
+            $('#myTableMail thead tr').clone(true).appendTo('#myTable thead');
+            $('#myTableMail thead tr:eq(1) th').each(function (i) {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            var table = $('#myTableMail').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                selectedSingle: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'print'
+                ],
+                columnDefs: [
+                    {"width": "20%", "targets": 0},
+                    {"width": "20%", "targets": 1},
+                    {"width": "20%", "targets": 2},
+                    {"width": "20%", "targets": 3},
+                    {"width": "20%", "targets": 4},
+                ],
+            });
+        });
+    </script>
+
+    <div class='snippet'>
+        <div class='metadata'>
+            <span style="float: left ; margin-left: 18px ; font-weight: bold">Reporting mail</span>
+            <span style="float: right ; margin-right: 18px ; font-weight: bold"><a
+                        href="/sendedMails">Rafraichir</a></span>
+        </div>
+        <br>
+        <div style="padding: 18px">
+            <table id="myTableMail" class="display nowrap" style="width: 100%">
+                <thead>
+                <th>Code</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date fin formation</th>
+                <th>Etat</th>
+                <th></th>
+                </thead>
+                <tbody>
+                {{range .Personnes}}
+                    <tr>
+                        <td>{{.Entreprise.Code}}</td>
+                        <td>{{.Nom}}</td>
+                        <td>{{.Prenom}}</td>
+                        {{with index .Formation 0}}
+                            <td>{{humainDate .DateFin}}</td>
+                        {{end}}
+                        <td>{{if eq .FlagMail 1}}
+                                <span style="color: green">OK</span> {{else if eq .FlagMail 2}}
+                                <span style="color: red">KO <button class="btnsMail" onclick="sendMail({{.}})"><span>Envoyer</span></button> </span>{{end}}
+                        </td>
+                        <td>
+                            <button class="btnsMail" style="width: 70px" onclick="infoStagiaire({{.Id}})">Info</button>
+                        </td>
+
+                    </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+{{end}}

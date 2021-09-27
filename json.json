@@ -1,0 +1,95 @@
+{
+  "CurrentYear": 0,
+  "Personne": null,
+  "Personnes": [
+    {
+      "id": 1,
+      "created_at": "2019-04-10T23:35:23Z",
+      "nom": "HDDAD",
+      "prenom": "Adil",
+      "age": 37,
+      "dateNaissance": "1981-04-01T00:04:05Z",
+      "tel": 637945569,
+      "mail": "",
+      "Adresse": "218 rue Jules Verne Hénin-Beaumont",
+      "entreprise": {
+        "id": 1,
+        "nom": "Wordline",
+        "code": "pk522260"
+      },
+      "EntrepriseId": 1,
+      "document": [
+        {
+          "id": 1,
+          "libelle": "Fiche d'assiduité"
+        },
+        {
+          "id": 2,
+          "libelle": "Fiche d'inscription"
+        }
+      ],
+      "formation": [
+        {
+          "id": 1,
+          "CreatedAt": "2019-04-10T23:35:23Z",
+          "intitule": "Informatique",
+          "date_debut": "2018-01-02T23:04:05Z",
+          "date_fin": "2018-09-03T00:04:05Z",
+          "nbr_heures": 180,
+          "cout": 1500
+        },
+        {
+          "id": 2,
+          "CreatedAt": "2019-07-13T01:10:56Z",
+          "intitule": "Permis",
+          "date_debut": "2019-03-13T01:11:08Z",
+          "date_fin": "2019-05-13T01:11:20Z",
+          "nbr_heures": 50,
+          "cout": 1200.5
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "created_at": "2019-04-22T21:36:02Z",
+      "nom": "CHASSAGNIAC",
+      "prenom": "Jessica",
+      "age": 36,
+      "dateNaissance": "1982-10-31T23:04:05Z",
+      "tel": 69856685,
+      "mail": "",
+      "Adresse": "",
+      "entreprise": {
+        "id": 2,
+        "nom": "Medef",
+        "code": "pk123456"
+      },
+      "EntrepriseId": 2,
+      "document": [
+        {
+          "id": 1,
+          "libelle": "Fiche d'assiduité"
+        },
+        {
+          "id": 2,
+          "libelle": "Fiche d'inscription"
+        },
+        {
+          "id": 3,
+          "libelle": "cassier judiciaire"
+        }
+      ],
+      "formation": [
+        {
+          "id": 1,
+          "CreatedAt": "2019-04-10T23:35:23Z",
+          "intitule": "Informatique",
+          "date_debut": "2018-01-02T23:04:05Z",
+          "date_fin": "2018-09-03T00:04:05Z",
+          "nbr_heures": 180,
+          "cout": 1500
+        }
+      ]
+    }
+  ]
+}
