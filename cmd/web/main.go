@@ -55,8 +55,8 @@ type serviceMail struct {
 func main() {
 
 	// get envirenement
-	env := *flag.String("env", "DEV", "Envirenement")
-	//env := *flag.String("env", "PROD", "Envirenement")
+	//env := *flag.String("env", "DEV", "Envirenement")
+	env := *flag.String("env", "PROD", "Envirenement")
 
 	// Define a new command-line flag for the session secret (a random key which
 	// will be used to encrypt and authenticate session cookies). It should be 32
@@ -112,7 +112,7 @@ func main() {
 		//window
 		dsn = *flag.String("dsn", "root:r00t@tcp(localhost:3306)/agefice_db?parseTime=true", "MySQL data source name")
 	} else {
-		dsn = *flag.String("dsn", "root:sherine2011@tcp(54.38.189.215:3306)/agefice_docs?parseTime=true", "MySQL data source name")
+		dsn = *flag.String("dsn", "root:sherine2011@tcp(217.160.188.174:3306)/agefice_docs?parseTime=true", "MySQL data source name")
 	}
 	//dsn := flag.String("dsn", "root:r00t@tcp(localhost:3306)/agefice_docs?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
