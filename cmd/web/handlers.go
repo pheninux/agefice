@@ -411,7 +411,7 @@ func (app *application) createPersonne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.PostForm.Get("action") == "Enregistrer" {
+	if  id == 0 {
 		err = app.dbModel.Insert(p)
 		if err != nil {
 			app.serverError(w, err)
@@ -425,7 +425,6 @@ func (app *application) createPersonne(w http.ResponseWriter, r *http.Request) {
 			app.session.Put(r, "flash", "Stagiaire crée avec succés")
 		}
 	} else {
-		id, _ := strconv.Atoi(r.PostForm.Get("idPersonne"))
 		p.Id = id
 		err = app.dbModel.Update(p)
 		if err != nil {

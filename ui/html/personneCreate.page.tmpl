@@ -274,7 +274,8 @@
             $('#myForm').find('input, select').removeAttr('disabled');
         }
         var razeForm = function () {
-            $('#myForm').find('input[type="text"],input[type="checkbox"],input[type="date"],input[type="number"] select').attr('value', '').attr('checked', false);
+            $('#myForm').find('input[type="text"],input[type="date"],input[type="number"] select').attr('value', '');
+            $('#myForm').find('input[type="checkbox"]').attr('checked', false);
             $('#statut').val('');
             $('#nbrHrs').val('');
             $('#select-forma').val('');
