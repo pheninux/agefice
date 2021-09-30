@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -112,80 +111,47 @@ func (app *application) getByMfa(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) login(w http.ResponseWriter, r *http.Request) {
 
-	var files []string
-	if app.env == "DEV" {
-		files = []string{
-			"./ui/html/login.page.tmpl",
-			"./ui/html/base.layout.tmpl",
-			"./ui/html/footer.partial.tmpl",
-		}
-	} else {
-		files = []string{
-			"/var/www/go/deploy/agefice/ui/html/login.page.tmpl",
-			"/var/www/go/deploy/agefice/ui/html/base.layout.tmpl",
-			"/var/www/go/deploy/agefice/ui/html/footer.partial.tmpl",
-		}
-	}
+	app.render(w, r, "login.page.tmpl", nil)
 
-	ts, err := template.New("login.page.tmpl").Funcs(functions).ParseFiles(files...)
-
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-
-	err = ts.Execute(w, nil)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	//var files []string
+	//if app.env == "DEV" {
+	//	files = []string{
+	//		"./ui/html/login.page.tmpl",
+	//		"./ui/html/base.layout.tmpl",
+	//		"./ui/html/footer.partial.tmpl",
+	//	}
+	//} else {
+	//	files = []string{
+	//		"/var/www/go/deploy/agefice/ui/html/login.page.tmpl",
+	//		"/var/www/go/deploy/agefice/ui/html/base.layout.tmpl",
+	//		"/var/www/go/deploy/agefice/ui/html/footer.partial.tmpl",
+	//	}
+	//}
+	//
+	//ts, err := template.New("login.page.tmpl").Funcs(functions).ParseFiles(files...)
+	//
+	//if err != nil {
+	//	app.serverError(w, err)
+	//	return
+	//}
+	//
+	//err = ts.Execute(w, nil)
+	//if err != nil {
+	//	app.serverError(w, err)
+	//}
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
-	// Because Pat matches the "/" path exactly, we can now remove the manual check
-	// of r.URL.Path != "/" from this handler.
+	fmt.Println("je suis bien dans le handler home")
 	p, err := app.dbModel.Latest()
-
 	if err != nil {
-
 		app.serverError(w, err)
 		return
 	}
-
-	var files []string
-	if app.env == "DEV" {
-		files = []string{
-			"./ui/html/home.page.tmpl",
-			"./ui/html/base.layout.tmpl",
-			"./ui/html/footer.partial.tmpl",
-		}
-	} else {
-		files = []string{
-			"/var/www/go/deploy/agefice/ui/html/home.page.tmpl",
-			"/var/www/go/deploy/agefice/ui/html/base.layout.tmpl",
-			"/var/www/go/deploy/agefice/ui/html/footer.partial.tmpl",
-		}
-	}
-
 	td := app.addDefaultData(&templateData{Personnes: p}, r)
+	app.render(w, r, "home.page.tmpl", app.addDefaultData(td, r))
 
-	ts, err := template.New("home.page.tmpl").Funcs(functions).ParseFiles(files...)
-
-	if err != nil {
-
-		app.serverError(w, err)
-		return
-	}
-
-	err = ts.Execute(w, app.addCurrentYear(td, r))
-	if err != nil {
-
-		app.serverError(w, err)
-
-	}
-	// Use the new render helper.
-	//app.ToJson(w, td, 200)
-	//app.render(w, r, "home.page.tmpl", app.addDefaultData(td, r))
 }
 func (app *application) showPersonne(w http.ResponseWriter, r *http.Request) {
 
@@ -411,7 +377,7 @@ func (app *application) createPersonne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if  id == 0 {
+	if id == 0 {
 		err = app.dbModel.Insert(p)
 		if err != nil {
 			app.serverError(w, err)
@@ -696,8 +662,11 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 	}
 	// Add the ID of the current user to the session, so that they are now 'logged // in'.
 	app.session.Put(r, "authenticatedUserID", id)
+	user := app.session.Get(r, "authenticatedUserID")
+	fmt.Printf("id user : %v \n", id)
+	fmt.Printf("id user  from session: %v \n", user)
 	// Redirect the user to the create snippet page.
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusOK)
 }
 func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	// Remove the authenticatedUserID from the session data so that the user is

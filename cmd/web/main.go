@@ -3,7 +3,6 @@ package main
 import (
 	"adilhaddad.net/agefice-docs/pkg/models"
 	"adilhaddad.net/agefice-docs/pkg/models/mysql"
-	"crypto/tls"
 	"database/sql"
 	"flag"
 	"github.com/golangcollege/sessions"
@@ -14,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"time"
 )
 
@@ -70,16 +70,21 @@ func main() {
 	session.Lifetime = 2 * time.Hour
 	session.Secure = true
 
+	var fi, fe *os.File
+	var err error
 	//for windows OS
-	fi, err := os.OpenFile("C:\\goLogs\\info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	fe, err := os.OpenFile("C:\\goLogs\\error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	//for lunix mac OS
-	//fi, err := os.OpenFile("/tmp/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
-	//fe, err := os.OpenFile("/tmp/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	if runtime.GOOS == "windows" {
+		fi, err = os.OpenFile("C:\\goLogs\\info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		fe, err = os.OpenFile("C:\\goLogs\\error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	} else {
+		//for lunix mac OS
+		fi, err = os.OpenFile("/tmp/info.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+		fe, err = os.OpenFile("/tmp/error.log", os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
+	}
 
 	if err != nil {
 		log.Fatal(err)
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() + "\n")
 	}
 	defer fi.Close()
 	defer fe.Close()
@@ -112,7 +117,7 @@ func main() {
 		//window
 		dsn = *flag.String("dsn", "root:r00t@tcp(localhost:3306)/agefice_db?parseTime=true", "MySQL data source name")
 	} else {
-		dsn = *flag.String("dsn", "root:sherine2011@tcp(217.160.188.174:3306)/agefice_docs?parseTime=true", "MySQL data source name")
+		dsn = *flag.String("dsn", "adil:Sherine2011$@tcp(localhost:3306)/agefice_docs?parseTime=true", "MySQL data source name")
 	}
 	//dsn := flag.String("dsn", "root:r00t@tcp(localhost:3306)/agefice_docs?parseTime=true", "MySQL data source name")
 	// Importantly, we use the flag.Parse() function to parse the command-line flag.
@@ -128,7 +133,7 @@ func main() {
 	db, err := openGormDB(dsn, fe)
 	if err != nil {
 		errorLog.Fatal(err)
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error()+ "\n")
 	}
 
 	//We also defer a call to db.Close(), so that the connection pool is closed
@@ -147,6 +152,7 @@ func main() {
 
 	if err != nil {
 		errorLog.Fatal(err)
+		fe.WriteString(err.Error() +"\n")
 	}
 	// Initialize a new instance of application containing the dependencies.
 	app := &application{
@@ -160,9 +166,9 @@ func main() {
 		env:           env}
 
 	// Initialize a tls.Config struct to hold the non-default TLS settings we want // the server to use.
-	tlsConfig := &tls.Config{
-		PreferServerCipherSuites: true,
-		CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256}}
+	//tlsConfig := &tls.Config{
+	//	PreferServerCipherSuites: true,
+	//	CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256}}
 
 	srv := &http.Server{
 		Addr:     cfg.addr,
@@ -175,12 +181,13 @@ func main() {
 	}
 
 	app.infoLog.Printf("Starting server on %v ", cfg.addr)
-	fi.WriteString("Starting server on : " + cfg.addr)
+	fi.WriteString("Starting server on : " + cfg.addr +"\n")
 	if env == "DEV" {
 		err = srv.ListenAndServe()
 	} else {
-		srv.TLSConfig = tlsConfig
-		err = srv.ListenAndServeTLS("/var/www/go/deploy/agefice/tls/cert.pem", "/var/www/go/deploy/agefice/tls/key.pem")
+		err = srv.ListenAndServe()
+		//srv.TLSConfig = tlsConfig
+		//err = srv.ListenAndServeTLS("/var/www/go/deploy/agefice/tls/cert.pem", "/var/www/go/deploy/agefice/tls/key.pem")
 	}
 
 	fe.WriteString(err.Error() + "\n")
@@ -192,7 +199,7 @@ func main() {
 func openDB(dsn string, fe *os.File) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() +"\n")
 		return nil, err
 	}
 	if err = db.Ping(); err != nil {
@@ -206,7 +213,7 @@ func openGormDB(dsn string, fe *os.File) (*gorm.DB, error) {
 	db, err := gorm.Open("mysql", dsn)
 
 	if err != nil {
-		fe.WriteString(err.Error())
+		fe.WriteString(err.Error() +"\n")
 		return nil, err
 	}
 
