@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	FROM     = "jchassagnac@utas.fr"
-	PASSWORD = "Jcre*951"
+	FROM     = ""
+	PASSWORD = ""
 )
 
 type mail struct {
